@@ -38,7 +38,7 @@ const login = async (req, res) => {
     if (userID) {
       //check if token has user id
       let targetedUserID = await userModel.findById(userID);
-      if (targetedUserID) {
+      if (targetedUserID && targetedUserID.isLogout==false) {
         // check if the user id matches database
         targetedUserID.isLogout=false
         await userModel.findOneAndUpdate({ _id: userID },targetedUserID,{ new: true });
