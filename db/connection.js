@@ -1,9 +1,10 @@
-
-
 import mongoose from 'mongoose';
+import 'dotenv/config'
+
+
 
 const connection = () => {
-    mongoose.connect("mongodb://127.0.0.1:27017/trello-like_DB")
+    mongoose.connect(`mongodb+srv://${process.env.DB_UserName}:${process.env.DB_Password}@cluster95596.pbabicr.mongodb.net/`)
         .then(() => console.log("DB connected"))
         .catch((err) => console.log(`DB error ${err}`))
 }
