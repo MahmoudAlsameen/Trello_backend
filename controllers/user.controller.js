@@ -230,41 +230,48 @@ const logout = async (req, res) => {
 const loginGoogle = async (req, res) => {
   try {
     if (req.body.sub) {
-
-      let userSub = req.body.sub
+      let userSub = req.body.sub;
       let targetedUserSub = await userModel.findOne({ sub: userSub });
 
       if (targetedUserSub) {
-        console.log('no token from loginGoogle ')
+        console.log('no token from loginGoogle ');
         let token = jwt.sign({ id: targetedUserSub.sub }, 'bl7 5ales');
         await userModel.findOneAndUpdate({ sub: targetedUserSub.sub }, { isLogout: false }, { new: true });
         console.log('logged in successfully', token);
-        res.status(200).json({ message: 'logged in successfully', token })
-
+        res.status(200).json({ message: 'logged in successfully', token });
       }
-    } else {
+    }
+
+    // Check if both req.body.sub and targetedUserSub are falsy
+    if (!req.body.sub && !targetedUserSub) {
       const email = req.body.email;
 
-      const userSub = req.body.sub
-      const fName = req.body.fName
-      const lName = req.body.lName
-      const userName = email
-      const password = "dummy password"
-      const isVerified = true
-      const isDeleted = false
-      const isLogout = false
+      const userSub = req.body.sub;
+      const fName = req.body.fName;
+      const lName = req.body.lName;
+      const userName = email;
+      const password = "dummy password";
+      const isVerified = true;
+      const isDeleted = false;
+      const isLogout = false;
 
       let addedUser = await userModel.insertMany({
-        email, sub: userSub, fName, lName, userName, password, isVerified, isDeleted, isLogout
+        email,
+        sub: userSub,
+        fName,
+        lName,
+        userName,
+        password,
+        isVerified,
+        isDeleted,
+        isLogout
       });
       console.log('added successfully', addedUser);
 
       let token = jwt.sign({ id: addedUser.sub }, 'bl7 5ales');
       await userModel.findOneAndUpdate({ sub: addedUser.sub }, { isLogout: false }, { new: true });
       console.log('signed up & logged in successfully', token);
-      res.status(200).json({ message: 'signed up & logged in successfully', token })
-
-
+      res.status(200).json({ message: 'signed up & logged in successfully', token });
     }
   } catch (err) {
     console.log('error logging in with Google', err);
