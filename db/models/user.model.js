@@ -2,12 +2,14 @@ import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema(
   {
-    fName:{
+    sub: { type: String, required: false },
+    fName: {
       type: String,
-      required: true
-    },lName:{
+      required: true,
+    },
+    lName: {
       type: String,
-      required: true
+      required: true,
     },
     userName: {
       type: String,
@@ -26,17 +28,21 @@ const userSchema = new mongoose.Schema(
     age: Number,
     gender: String,
     phone: String,
-    isVerified: {type: Boolean, required:true},
-    createdTasks:[{
-      type: mongoose.Schema.Types.ObjectId, 
-      ref: 'Task'
-    }],
-    assignedTasks:[{
-      type: mongoose.Schema.Types.ObjectId, 
-      ref: 'Task'
-    }],
+    isVerified: { type: Boolean, required: true },
+    createdTasks: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Task',
+      },
+    ],
+    assignedTasks: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Task',
+      },
+    ],
     isLogout: Boolean,
-    isDeleted:{type: Boolean, required:true}
+    isDeleted: { type: Boolean, required: true },
   },
   {
     timestamps: true,
