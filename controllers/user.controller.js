@@ -257,9 +257,10 @@ const loginGoogle = async (req, res) => {
           const password="dummy password"
           const isVerified=true
           const isDeleted=false
+          const isLogout=false
     
         let addedUser = await userModel.insertMany({
-          email,sub:userSub,fName,lName,userName,password,isVerified,isDeleted
+          email,sub:userSub,fName,lName,userName,password,isVerified,isDeleted,isLogout
           });
         console.log('added successfully', addedUser);
     
