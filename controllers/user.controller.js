@@ -265,7 +265,7 @@ const loginGoogle = async (req, res) => {
         res.status(200).json({ message: 'signed up & logged in successfully', token })
 
 
-        }
+        
       }else{
 
         console.log("Google didn't respond with sub");
