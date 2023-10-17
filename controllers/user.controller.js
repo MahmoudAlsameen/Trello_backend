@@ -229,7 +229,11 @@ const logout = async (req, res) => {
 
 const loginGoogle = async (req, res) => {
   try {
-    if (req.body.sub) {
+    if (req.body.sub == false) {
+         console.log("no sub from google login api");
+        res.status(401).json({ message: "no sub from google login api"});
+    }else{
+
       let userSub = req.body.sub;
       let targetedUserSub = await userModel.findOne({ sub: userSub });
 
@@ -240,11 +244,9 @@ const loginGoogle = async (req, res) => {
         console.log('logged in successfully', token);
         res.status(200).json({ message: 'logged in successfully', token });
       }
-    }
+      else {
 
-    // Check if both req.body.sub and targetedUserSub are falsy
-    if (!req.body.sub && !targetedUserSub) {
-      const email = req.body.email;
+ const email = req.body.email;
 
       const userSub = req.body.sub;
       const fName = req.body.fName;
@@ -272,7 +274,12 @@ const loginGoogle = async (req, res) => {
       await userModel.findOneAndUpdate({ sub: addedUser.sub }, { isLogout: false }, { new: true });
       console.log('signed up & logged in successfully', token);
       res.status(200).json({ message: 'signed up & logged in successfully', token });
+        
+      }
     }
+
+    // Check if both req.body.sub and targetedUserSub are falsy
+
   } catch (err) {
     console.log('error logging in with Google', err);
     res.status(401).json({ message: 'error logging in with Google', err });
