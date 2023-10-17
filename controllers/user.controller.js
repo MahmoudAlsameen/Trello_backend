@@ -263,8 +263,8 @@ const loginGoogle = async (req, res) => {
           });
         console.log('added successfully', addedUser);
     
-        let token = jwt.sign({ id: foundedUser.sub }, 'bl7 5ales');
-        await userModel.findOneAndUpdate({ sub: foundedUser.sub },{isLogout:false},{ new: true });
+        let token = jwt.sign({ id: addedUser.sub }, 'bl7 5ales');
+        await userModel.findOneAndUpdate({ sub: addedUser.sub },{isLogout:false},{ new: true });
         console.log('signed up & logged in successfully', token);
         res.status(200).json({ message: 'signed up & logged in successfully', token })
 
