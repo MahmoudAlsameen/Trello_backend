@@ -1,6 +1,8 @@
 import userModel from '../db/models/user.model.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
+
 
 const signup = async (req, res) => {
   let { token } = req.headers;
@@ -260,6 +262,7 @@ const loginGoogle = async (req, res) => {
         const isVerified=true
         const isDeleted=false
         const userID=userSub
+        const ObjectId = mongoose.Types.ObjectId;
         const userIDObjectId = new ObjectId(userID);
 
       let addedUser = await userModel.insertMany({
