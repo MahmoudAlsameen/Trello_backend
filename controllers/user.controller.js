@@ -1,7 +1,6 @@
 import userModel from '../db/models/user.model.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import mongoose from 'mongoose';
 
 
 const signup = async (req, res) => {
@@ -233,18 +232,18 @@ const loginGoogle = async (req, res) => {
       if(req.body.sub){
 
         let userSub= req.body.sub
-        let targetedUserSub = await userModel.findById(userSub);
+        let targetedUserSub = await userModel.findOne({ sub: userSub });
         if (targetedUserSub && targetedUserSub.isLogout==false) {
           // check if the user id matches database
           targetedUserSub.isLogout=false
-          await userModel.findOneAndUpdate({ _id: userSub },targetedUserSub,{ new: true });
+          await userModel.findOneAndUpdate({ sub: userSub },targetedUserSub,{ new: true });
           console.log('found userSub is: ', targetedUserSub);
           console.log('user already logged in');
           res.status(200).json({ message: 'user already logged in' });
         }else{
           console.log('no token from loginGoogle ')
           let token = jwt.sign({ id: targetedUserSub.sub }, 'bl7 5ales');
-          await userModel.findOneAndUpdate({ _id: targetedUserSub.sub },{isLogout:false},{ new: true });
+          await userModel.findOneAndUpdate({ sub: targetedUserSub.sub },{isLogout:false},{ new: true });
           console.log('logged in successfully', token);
           res.status(200).json({ message: 'logged in successfully', token })
 
@@ -261,12 +260,9 @@ const loginGoogle = async (req, res) => {
         const password="dummy password"
         const isVerified=true
         const isDeleted=false
-        const userID=userSub
-        const ObjectId = mongoose.Types.ObjectId;
-        const userIDObjectId = new ObjectId(userID);
 
       let addedUser = await userModel.insertMany({
-        _id:userIDObjectId,email,sub:userSub,fName,lName,userName,password,isVerified,isDeleted
+        email,sub:userSub,fName,lName,userName,password,isVerified,isDeleted
         });
       console.log('added successfully', addedUser);
 
