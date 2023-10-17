@@ -247,34 +247,35 @@ const loginGoogle = async (req, res) => {
           console.log('logged in successfully', token);
           res.status(200).json({ message: 'logged in successfully', token })
 
-        }
-        else{res.status(200).json({ message: 'Nothing' })}
-      }else{
-        //signup with google
-
-        const email = req.body.email;
-    
-        const userSub = req.body.sub
-        const fName = req.body.fName
-        const lName = req.body.lName
-        const userName = email
-        const password="dummy password"
-        const isVerified=true
-        const isDeleted=false
-
-      let addedUser = await userModel.insertMany({
-        email,sub:userSub,fName,lName,userName,password,isVerified,isDeleted
-        });
-      console.log('added successfully', addedUser);
-
-      let token = jwt.sign({ id: foundedUser.sub }, 'bl7 5ales');
-      await userModel.findOneAndUpdate({ sub: foundedUser.sub },{isLogout:false},{ new: true });
-      console.log('logged in successfully', token);
-      res.status(200).json({ message: 'logged in successfully', token })
-
-
+        }else{
+          const email = req.body.email;
       
-    }
+          const userSub = req.body.sub
+          const fName = req.body.fName
+          const lName = req.body.lName
+          const userName = email
+          const password="dummy password"
+          const isVerified=true
+          const isDeleted=false
+    
+        let addedUser = await userModel.insertMany({
+          email,sub:userSub,fName,lName,userName,password,isVerified,isDeleted
+          });
+        console.log('added successfully', addedUser);
+    
+        let token = jwt.sign({ id: foundedUser.sub }, 'bl7 5ales');
+        await userModel.findOneAndUpdate({ sub: foundedUser.sub },{isLogout:false},{ new: true });
+        console.log('signed up & logged in successfully', token);
+        res.status(200).json({ message: 'signed up & logged in successfully', token })
+
+
+        }
+      }else{
+
+        console.log("Google didn't respond with sub");
+    res.status(401).json({ message: "Google didn't respond with sub" });
+      }
+        //signup with google
       
       
     } catch (err) {
