@@ -240,7 +240,7 @@ const loginGoogle = async (req, res) => {
           console.log('found userSub is: ', targetedUserSub);
           console.log('user already logged in');
           res.status(200).json({ message: 'user already logged in' });
-        }else{
+        }else if(targetedUserSub){
           console.log('no token from loginGoogle ')
           let token = jwt.sign({ id: targetedUserSub.sub }, 'bl7 5ales');
           await userModel.findOneAndUpdate({ sub: targetedUserSub.sub },{isLogout:false},{ new: true });
