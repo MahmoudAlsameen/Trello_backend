@@ -246,7 +246,7 @@ const loginGoogle = async (req, res) => {
         res.status(200).json({ message: 'user already logged in' });
       }
     }
-      else if(req.body.sub){
+    }else if(req.body.sub){
 
         let userSub= req.body.sub
         let targetedUserSub = await userModel.findOne({ sub: userSub });
