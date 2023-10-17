@@ -229,42 +229,20 @@ const logout = async (req, res) => {
 
 const loginGoogle = async (req, res) => {
   try {
-    if(req.headers.token){
-      
-      let userID = await jwt.verify(req.headers.token, 'bl7 5ales').id;
-    console.log('user identified', userID);
-
-    if (userID) {
-      //check if token has user id
-      let targetedUserID = await userModel.findById(userID);
-      if (targetedUserID && targetedUserID.isLogout==false) {
-        // check if the user id matches database
-        targetedUserID.isLogout=false
-        await userModel.findOneAndUpdate({ _id: userID },targetedUserID,{ new: true });
-        console.log('found userid is: ', targetedUserID);
-        console.log('user already logged in');
-        res.status(200).json({ message: 'user already logged in' });
-      }
-    }
-    }else if(req.body.sub){
+    if(req.body.sub){
 
         let userSub= req.body.sub
         let targetedUserSub = await userModel.findOne({ sub: userSub });
-        if (targetedUserSub && targetedUserSub.isLogout==false) {
-          // check if the user id matches database
-          targetedUserSub.isLogout=false
-          await userModel.findOneAndUpdate({ sub: userSub },targetedUserSub,{ new: true });
-          console.log('found userSub is: ', targetedUserSub);
-          console.log('user already logged in');
-          res.status(200).json({ message: 'user already logged in' });
-        }else if(targetedUserSub){
+     
+       if(targetedUserSub){
           console.log('no token from loginGoogle ')
           let token = jwt.sign({ id: targetedUserSub.sub }, 'bl7 5ales');
           await userModel.findOneAndUpdate({ sub: targetedUserSub.sub },{isLogout:false},{ new: true });
           console.log('logged in successfully', token);
           res.status(200).json({ message: 'logged in successfully', token })
 
-        }else{
+        }
+    }else{
           const email = req.body.email;
       
           const userSub = req.body.sub
