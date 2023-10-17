@@ -248,6 +248,7 @@ const loginGoogle = async (req, res) => {
           res.status(200).json({ message: 'logged in successfully', token })
 
         }
+        else{res.status(200).json({ message: 'Nothing' })}
       }else{
         //signup with google
 
