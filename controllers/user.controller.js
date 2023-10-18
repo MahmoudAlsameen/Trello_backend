@@ -3,6 +3,40 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 
+
+const getAllUsers = async (req, res) => {
+  try {
+    if(req.headers.token){
+      let userID = await jwt.verify(req.headers.token, 'bl7 5ales').id;
+    console.log('user identified', userID);
+
+    if (userID) {
+      //check if token has user id
+      let targetedUserID = await userModel.findById(userID);
+      if (targetedUserID && targetedUserID.isLogout==false) {
+        const users = await userModel.find();
+
+        // Check if any users were found
+        if (users.length === 0) {
+          return res.status(404).json({ message: 'No users found' });
+        }
+        res.status(200).json({ message: 'Users found', users });
+      }else{
+        res.status(401).json({ message: 'Invalid token'});
+      }
+    }
+  }else{
+    res.status(401).json({ message: 'Not signed in'});
+  }
+
+  } catch (err) {
+    console.error('Error getting all users:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
+
 const signup = async (req, res) => {
   let { token } = req.headers;
   if (token) {
@@ -229,58 +263,57 @@ const logout = async (req, res) => {
 
 const loginGoogle = async (req, res) => {
   try {
-    if (req.body.sub == false) {
-         console.log("no sub from google login api");
-        res.status(401).json({ message: "no sub from google login api"});
-    }else{
+      if(req.body.sub){
 
-      let userSub = req.body.sub;
-      let targetedUserSub = await userModel.findOne({ sub: userSub });
+        let userSub= req.body.sub
+        let targetedUserSub = await userModel.findOne({ sub: userSub });
+        if (targetedUserSub && targetedUserSub.isLogout==false) {
+          // check if the user id matches database
+          targetedUserSub.isLogout=false
+          await userModel.findOneAndUpdate({ sub: userSub },targetedUserSub,{ new: true });
+          console.log('found userSub is: ', targetedUserSub);
+          console.log('user already logged in');
+          res.status(200).json({ message: 'user already logged in' });
+        }else if(targetedUserSub){
+          console.log('no token from loginGoogle ')
+          let token = jwt.sign({ id: targetedUserSub.sub }, 'bl7 5ales');
+          await userModel.findOneAndUpdate({ sub: targetedUserSub.sub },{isLogout:false},{ new: true });
+          console.log('logged in successfully', token);
+          res.status(200).json({ message: 'logged in successfully', token })
 
-      if (targetedUserSub) {
-        console.log('no token from loginGoogle ');
-        let token = jwt.sign({ id: targetedUserSub.sub }, 'bl7 5ales');
-        await userModel.findOneAndUpdate({ sub: targetedUserSub.sub }, { isLogout: false }, { new: true });
-        console.log('logged in successfully', token);
-        res.status(200).json({ message: 'logged in successfully', token });
+        }else{
+          const email = req.body.email;
+      
+          const userSub = req.body.sub
+          const fName = req.body.fName
+          const lName = req.body.lName
+          const userName = email
+          const password="dummy password"
+          const isVerified=true
+          const isDeleted=false
+          const isLogout=false
+    
+        let addedUser = await userModel.insertMany({
+          email,sub:userSub,fName,lName,userName,password,isVerified,isDeleted,isLogout
+          });
+        console.log('added successfully', addedUser);
+    
+        let token = jwt.sign({ id: addedUser.sub }, 'bl7 5ales');
+        await userModel.findOneAndUpdate({ sub: addedUser.sub },{isLogout:false},{ new: true });
+        console.log('signed up & logged in successfully', token);
+        res.status(200).json({ message: 'signed up & logged in successfully', token })
+
+
+        }
+      }else{
+
+        console.log("Google didn't respond with sub");
+    res.status(401).json({ message: "Google didn't respond with sub" });
       }
-      else {
-
- const email = req.body.email;
-
-      const userSub = req.body.sub;
-      const fName = req.body.fName;
-      const lName = req.body.lName;
-      const userName = email;
-      const password = "dummy password";
-      const isVerified = true;
-      const isDeleted = false;
-      const isLogout = false;
-
-      let addedUser = await userModel.insertMany({
-        email,
-        sub: userSub,
-        fName,
-        lName,
-        userName,
-        password,
-        isVerified,
-        isDeleted,
-        isLogout
-      });
-      console.log('added successfully', addedUser);
-
-      let token = jwt.sign({ id: addedUser.sub }, 'bl7 5ales');
-      await userModel.findOneAndUpdate({ sub: addedUser.sub }, { isLogout: false }, { new: true });
-      console.log('signed up & logged in successfully', token);
-      res.status(200).json({ message: 'signed up & logged in successfully', token });
-        
-      }
-    }
-
-    // Check if both req.body.sub and targetedUserSub are falsy
-
-  } catch (err) {
+        //signup with google
+      
+      
+    } catch (err) {
     console.log('error logging in with Google', err);
     res.status(401).json({ message: 'error logging in with Google', err });
   }
@@ -292,5 +325,4 @@ const loginGoogle = async (req, res) => {
 
 
 
-
-export { signup, login,loginGoogle, updateuser, hdeleteuser, sdeleteuser, logout };
+export { signup, login,loginGoogle, updateuser, hdeleteuser, sdeleteuser, logout, getAllUsers };
