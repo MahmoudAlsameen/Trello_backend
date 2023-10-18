@@ -273,7 +273,7 @@ const loginGoogle = async (req, res) => {
 
       if (targetedUserSub) {
         console.log('no token from loginGoogle ');
-        let token = jwt.sign({ id: targetedUserSub.sub }, 'bl7 5ales');
+        let token = jwt.sign({ id: targetedUserSub.id }, 'bl7 5ales');
         await userModel.findOneAndUpdate({ sub: targetedUserSub.sub }, { isLogout: false }, { new: true });
         console.log('logged in successfully', token);
         res.status(200).json({ message: 'logged in successfully', token });
@@ -303,7 +303,7 @@ const loginGoogle = async (req, res) => {
  });
  console.log('added successfully', addedUser);
     
- let token = jwt.sign({ id: addedUser.sub }, 'bl7 5ales');
+ let token = jwt.sign({ id: addedUser.id }, 'bl7 5ales');
  await userModel.findOneAndUpdate({ sub: addedUser.sub }, { isLogout: false }, { new: true });
  console.log('signed up & logged in successfully', token);
  res.status(200).json({ message: 'signed up & logged in successfully', token });
