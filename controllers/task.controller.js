@@ -21,6 +21,7 @@ const addtask = async (req, res) => {
       const targetedUser = await userModel.findById(userID);
   
       if (!targetedUser) {
+          console.log("User not found")
         return res.status(404).json({ message: "User not found" });
       }
   
@@ -34,7 +35,7 @@ const addtask = async (req, res) => {
       const taskValidationError = validateTask(taskValidationSchema, 'body');
   
       if (taskValidationError) {
-        console.log()
+         console.log( "Error validating task", taskValidationError)
         return res.status(400).json({ message: "Error validating task", error: taskValidationError });
       }
   
