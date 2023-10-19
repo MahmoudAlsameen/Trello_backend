@@ -7,6 +7,7 @@ import {
   getaAllTasksForUser,
   getalltaskswithuserdata,
   getalloverduetasks,
+  getaAllTasksAssignedForUser
 } from '../controllers/task.controller.js';
 
 const taskRoutes = express.Router();
