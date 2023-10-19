@@ -208,7 +208,7 @@ console.log("deletedTask.id is :",updatedTask.id)
         console.log("User not found")
         return res.status(404).json({ message: "User not found" });
       }
-        const allTasksWithUserData= await taskModel.findById(userID).populate('creatorID').populate('assignedTo')
+        const allTasksWithUserData= await taskModel.find({ creatorID: userID }).populate('creatorID').populate('assignedTo')
         console.log("Task dispalyed successfully");
         return res.status(201).json({ message: "Task displayed successfully", allTasksWithUserData });
 
