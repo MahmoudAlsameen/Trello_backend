@@ -14,7 +14,7 @@ const getAllUsers = async (req, res) => {
       //check if token has user id
       let targetedUserID = await userModel.findById(userID);
       if (targetedUserID && targetedUserID.isLogout==false) {
-        const users = await userModel.find();
+        const users = await userModel.find().populate('assignedTasks');
 
         // Check if any users were found
         if (users.length === 0) {
