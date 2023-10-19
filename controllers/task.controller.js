@@ -45,6 +45,7 @@ const addtask = async (req, res) => {
       const newTask = new taskModel(taskObj);
       await newTask.save();
       await userModel.findByIdAndUpdate(userID, { createdTasks: newTask.id }, { new: true })
+        await userModel.findByIdAndUpdate(newTask.assignedTo,{ $push: { assignedTasks: newTask } }, { new: true })
   
       res.status(201).json({ message: "Task created successfully", task: newTask });
     } catch (err) {
