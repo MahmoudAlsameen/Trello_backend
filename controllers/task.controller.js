@@ -284,4 +284,4 @@ const getalloverduetasks = async (req,res)=>{
     };
 
 
-export {addtask, updatetask, deletetask, getalltaskswithuserdata, getalloverduetasks, getaAllTasksForUser}
+export {addtask, updatetask, deletetask, getalltaskswithuserdata, getalloverduetasks, getaAllTasksForUser, getaAllTasksAssignedForUser}
