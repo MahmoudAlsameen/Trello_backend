@@ -220,7 +220,33 @@ console.log("deletedTask.id is :",updatedTask.id)
     };
 
 
-
+    const getaAllTasksAssignedForUser = async (req,res)=>{
+      try {
+         
+        if (!req.headers.token) {
+          return res.status(401).json({ message: "Authentication token missing" });
+        }
+    
+        // Verify the user's token and get their ID
+        const userID = jwt.verify(req.headers.token, 'bl7 5ales').id;
+        console.log('User identified:', userID);
+    
+        // Find the user by ID
+        const targetedUser = await userModel.findById(userID);
+    
+        if (!targetedUser) {
+          console.log("User not found")
+          return res.status(404).json({ message: "User not found" });
+        }
+          const allTasksAssignedToUser= await userModel.find(assignedTasks).populate('creatorID');('assignedTo')
+          console.log("Task dispalyed successfully");
+          return res.status(201).json({ message: "Task displayed successfully", allTasksAssignedToUser });
+  
+      } catch (err) {
+          console.error("Error displaying task:", err);
+          res.status(500).json({ message: "Error displaying task" });
+        }
+      };
 
 
 
