@@ -39,9 +39,8 @@ const getAllUsers = async (req, res) => {
 
 const signup = async (req, res) => {
   try{
-  let { token } = req.headers;
-  if (token) {
-    let userID = jwt.verify(token, 'bl7 5ales');
+  if (req.headers.token) {
+    let userID = await jwt.verify(req.headers.token, 'bl7 5ales').id;
     let targetedUserID = await userModel.findById(userID);
     if (targetedUserID) {
 
@@ -65,7 +64,7 @@ res.status(401).json({ message: "You're already signed in, please logout first" 
     }
   }}catch(err){
     console.log("error singing up", err)
-    res.status(201).json({ message: "error singing up", err });
+    res.status(401).json({ message: "error singing up", err });
   }
 };
 
