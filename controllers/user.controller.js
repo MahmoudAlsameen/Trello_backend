@@ -38,13 +38,15 @@ const getAllUsers = async (req, res) => {
 
 
 const signup = async (req, res) => {
+  try{
   let { token } = req.headers;
   if (token) {
-    let decoded = jwt.verify(token, 'bl7 5ales');
-    if (decoded) {
-      res
-        .status(401)
-        .json({ message: "You're already signed in, please logout first" });
+    let userID = jwt.verify(token, 'bl7 5ales');
+    let targetedUserID = await userModel.findById(userID);
+    if (targetedUserID) {
+
+console.log("You're already signed in, please logout first")
+res.status(401).json({ message: "You're already signed in, please logout first" });
     }
   } else {
     const email = req.body.email;
@@ -61,6 +63,9 @@ const signup = async (req, res) => {
       console.log('added successfully', addedUser);
       res.status(201).json({ message: 'added successfully', addedUser });
     }
+  }}catch(err){
+    console.log("error singing up", err)
+    res.status(201).json({ message: "error singing up", err });
   }
 };
 
