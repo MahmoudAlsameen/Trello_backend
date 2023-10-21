@@ -69,10 +69,14 @@ const updatetask = async (req,res)=>{
       console.log('User identified:', userID);
   
       // Find the user by ID
-      const targetedUser = await userModel.findById(userID);
-  
-      if (!targetedUser) {
-        return res.status(404).json({ message: "User not found" });
+
+
+      
+      const assignedUser = await taskModel.find({assignedTo:userID});
+      const creatorUser = await taskModel.find({creatorID:userID});
+
+      if (!assignedUser && !creatorUser) {
+        return res.status(404).json({ message: "Assigned User not found" });
       }
   
       // Define a function to validate user input
