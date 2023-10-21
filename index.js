@@ -12,9 +12,10 @@ connection();
 
 // Use the cors middleware to enable CORS and allow requests from 'http://localhost:5173'
 app.use(cors({
-  origin: 'http://localhost:5173', // Replace with your frontend's URL
+  origin: ['http://localhost:5173','https://trello-3bdallah.vercel.app'] // Replace with your frontend's URL
   methods: 'GET,POST,PUT,DELETE',
 }));
+
 
 app.use(userRoutes);
 app.use(taskRoutes);
