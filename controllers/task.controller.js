@@ -72,7 +72,7 @@ const updatetask = async (req,res)=>{
 
 
       
-      const assignedUser = await taskModel.find({assignedTo:userID});
+      const taskAssignedToUser = await taskModel.find({assignedTo:userID});
       const creatorUser = await taskModel.find({creatorID:userID});
 
       if (!assignedUser && !creatorUser) {
@@ -89,7 +89,7 @@ const updatetask = async (req,res)=>{
       const updateTaskValidationError = validateTask(updateTaskValidationSchema, 'body');
   
       if (updateTaskValidationError) {
-        console.log()
+        console.log(updateTaskValidationError)
         return res.status(400).json({ message: "Error validating task", error: updateTaskValidationError });
       }
   
@@ -97,8 +97,8 @@ const updatetask = async (req,res)=>{
       const updatedTask = req.body
 console.log("updatedTask.id is :",updatedTask.id)
       const isUserArr = await userModel.findById(userID)
-      const isUserArr2 = isUserArr.createdTasks
-      console.log('created tasks array of user: ',isUserArr2)
+      const userCreatedTasks = isUserArr.createdTasks
+      console.log('created tasks array of user: ',userCreatedTasks)
       let taskCreatorID= await taskModel.findById(updatedTask.id)
       if(!taskCreatorID){
         console.log("task not found");
@@ -107,9 +107,10 @@ console.log("updatedTask.id is :",updatedTask.id)
       taskCreatorID=taskCreatorID.creatorID
       console.log("taskCreatorID is : ",taskCreatorID)
 
-      const fIsUserArr = isUserArr2.filter((task) => task.equals(updatedTask.id));
+      const fIsUserArr = userCreatedTasks.filter((task) => task.equals(updatedTask.id));
       console.log("fIsUserArr: ",fIsUserArr)
-     if((fIsUserArr.length===1 && taskCreatorID.equals(userID)) || (assignedUser.id == updatedTask.id)){
+      console.log(fIsUserArr.length)
+      if((fIsUserArr.length===1 && taskCreatorID.equals(userID)) || (taskAssignedToUser.id == updatedTask.id)){
         let targetedTask= await taskModel.findByIdAndUpdate(updatedTask.id, updatedTask, { new: true })
         console.log("Task updated successfully");
        return res.status(201).json({ message: "Task updated successfully", targetedTask });
