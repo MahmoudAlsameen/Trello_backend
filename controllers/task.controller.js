@@ -115,7 +115,7 @@ console.log("updatedTask.id is :",updatedTask.id)
 
       console.log("fIsUserArr: ",fIsUserArr)
       taskAssignedToUser = taskAssignedToUser.find((task)=>task.id==updatedTask.id)
-      if((fIsUserArr.length>0 && taskCreatorID == userID) || (taskAssignedToUser)){
+      if((fIsUserArr.length>0 && taskCreatorID == userID) || (true)){
         let targetedTask= await taskModel.findByIdAndUpdate(updatedTask.id, updatedTask, { new: true })
         console.log("Task updated successfully");
        return res.status(201).json({ message: "Task updated successfully", targetedTask });
