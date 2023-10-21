@@ -94,12 +94,18 @@ const updatetask = async (req,res)=>{
       }
   
       // update task
-      const updatedTask = req.body
+      const updatedTask = req.body // the updated task from body
 console.log("updatedTask.id is :",updatedTask.id)
-      const user = await userModel.findById(userID)
-      const userCreatedTasks = user.createdTasks
-      console.log('created tasks array of user: ',userCreatedTasks)
-      const taskByCreator= await taskModel.findById(updatedTask.id)
+      const user = await userModel.findById(userID) // getting the user that created the task to make sure the created tasks inside is matching with the task id
+      const userCreatedTasks = user.createdTasks // the array of tasks that user created
+      const fIsUserArr = userCreatedTasks.filter((task) => task.equals(updatedTask.id)); // the array of tasks that matches the updated task id
+
+
+      console.log('userCreatedTasks: ',userCreatedTasks)
+
+
+
+      const taskByCreator= await taskModel.findById(updatedTask.id) // getting the task that i want to update
       if(!taskByCreator){
         console.log("task not found");
         return res.status(401).json({ message: "task not found" });
@@ -107,10 +113,9 @@ console.log("updatedTask.id is :",updatedTask.id)
       const taskCreatorID=taskByCreator.creatorID
       console.log("taskCreatorID is : ",taskCreatorID)
 
-      const fIsUserArr = userCreatedTasks.find((task) => task.id == updatedTask.id);
       console.log("fIsUserArr: ",fIsUserArr)
       taskAssignedToUser = taskAssignedToUser.find((task)=>task.id==updatedTask.id)
-      if((fIsUserArr && taskCreatorID.equals(userID)) || (true)){
+      if((fIsUserArr.length>0 && taskCreatorID == userID) || (taskAssignedToUser)){
         let targetedTask= await taskModel.findByIdAndUpdate(updatedTask.id, updatedTask, { new: true })
         console.log("Task updated successfully");
        return res.status(201).json({ message: "Task updated successfully", targetedTask });
