@@ -75,7 +75,7 @@ const updatetask = async (req,res)=>{
       const taskAssignedToUser = await taskModel.find({assignedTo:userID});
       const creatorUser = await taskModel.find({creatorID:userID});
 
-      if (!assignedUser && !creatorUser) {
+      if (!taskAssignedToUser && !creatorUser) {
         return res.status(404).json({ message: "Assigned User not found" });
       }
   
