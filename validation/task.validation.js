@@ -14,8 +14,8 @@ const taskValidationSchema = Joi.object({
 
 
 
-  const updateTaskValidationSchema = Joi.object({
-    id: Joi.string(),
+const updateTaskValidationSchema = Joi.object({
+    id: Joi.string().required(),
     title:Joi.string(),
     description:Joi.string(),
     status: Joi.string().valid('toDo', 'doing', 'done'),
