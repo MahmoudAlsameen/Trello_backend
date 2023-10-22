@@ -13,13 +13,13 @@ const getUser = async (req,res)=>{
       //check if token has user id
       let targetedUserID = await userModel.findById(userID);
       if (targetedUserID && targetedUserID.isLogout==false) {
-        const users = await userModel.findById(userID).populate('assignedTasks');
+        const user = await userModel.findById(userID).populate('assignedTasks');
 
         // Check if any users were found
-        if (users.length === 0) {
+        if (!user) {
           return res.status(404).json({ message: 'User not found' });
         }
-        res.status(200).json({ message: 'User found', users });
+        res.status(200).json({ message: 'User found', user });
       }else{
         res.status(401).json({ message: 'Invalid token'});
       }
