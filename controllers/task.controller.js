@@ -184,6 +184,8 @@ console.log("deletedTask.id is :",updatedTask.id)
       console.log("fIsUserArr: ",fIsUserArr)
       if(fIsUserArr.length===1 && taskCreatorID.equals(userID)){
         let targetedTask= await taskModel.findByIdAndDelete(updatedTask.id)
+         const newisUserArr2=isUserArr2.filter((task)=>{task.id !=updatedTask.id})
+         await userModel.findByIdAndUpdate(userID,{ $set: { createdTasks: newisUserArr2 } }, { new: true })
         console.log("Task deleted successfully");
        return res.status(201).json({ message: "Task deleted successfully", targetedTask });
       }else{
