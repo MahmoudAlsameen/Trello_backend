@@ -44,8 +44,10 @@ const addtask = async (req, res) => {
         ...req.body,
         creatorID: userID,
       });
-      await userModel.findByIdAndUpdate(userID, { createdTasks: newTask.id }, { new: true })
-        await userModel.findByIdAndUpdate(newTask.assignedTo,{ $push: { assignedTasks: newTask } }, { new: true })
+      await userModel.findByIdAndUpdate(userID, { $push: { createdTasks: newTask.id }}, { new: true })
+      await userModel.findByIdAndUpdate(newTask.assignedTo,{ $push: { assignedTasks: newTask.id } },
+        { new: true })
+  
   
       res.status(201).json({ message: "Task created successfully", task: newTask });
     } catch (err) {
