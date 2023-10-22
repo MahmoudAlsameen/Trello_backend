@@ -3,6 +3,39 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 
+const getUser = async (req,res)=>{
+  try {
+    if(req.headers.token){
+      let userID = await jwt.verify(req.headers.token, 'bl7 5ales').id;
+    console.log('user identified', userID);
+
+    if (userID) {
+      //check if token has user id
+      let targetedUserID = await userModel.findById(userID);
+      if (targetedUserID && targetedUserID.isLogout==false) {
+        const users = await userModel.findById(userID).populate('assignedTasks');
+
+        // Check if any users were found
+        if (users.length === 0) {
+          return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json({ message: 'User found', users });
+      }else{
+        res.status(401).json({ message: 'Invalid token'});
+      }
+    }
+  }else{
+    res.status(401).json({ message: 'Not signed in'});
+  }
+
+  } catch (err) {
+    console.error('Error getting user:', err);
+    res.status(500).json({ message: 'Internal server error',err });
+  }
+};
+
+
+
 
 const getAllUsers = async (req, res) => {
   try {
@@ -331,4 +364,4 @@ const loginGoogle = async (req, res) => {
 
 
 
-export { signup, login,loginGoogle, updateuser, hdeleteuser, sdeleteuser, logout, getAllUsers };
+export { signup, login,loginGoogle, updateuser, hdeleteuser, sdeleteuser, logout, getAllUsers, getUser };
