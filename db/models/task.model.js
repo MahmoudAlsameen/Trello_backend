@@ -7,6 +7,9 @@ const taskSchema = new mongoose.Schema({
   creatorID: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   deadline: Date,
+},
+{
+  timestamps: true,
 });
 
 const taskModel = mongoose.model('Task', taskSchema);
