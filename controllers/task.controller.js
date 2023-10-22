@@ -42,7 +42,7 @@ const addtask = async (req, res) => {
       // Create and save the task
       const newTask = await taskModel.insertMany({
         ...req.body,
-        creatroID: userID,
+        creatorID: userID,
       });
       await userModel.findByIdAndUpdate(userID, { createdTasks: newTask.id }, { new: true })
         await userModel.findByIdAndUpdate(newTask.assignedTo,{ $push: { assignedTasks: newTask } }, { new: true })
