@@ -187,13 +187,18 @@ const setUserPPic= async (req, res) => {
         return res.status(401).json({ message: "Error validating profile pic", error: PPicValidationError });
        }
 
-       let insertedpPic = await pPicModel.findOneAndUpdate({ userID: userID },{ pPic: req.body.pPic },{ new: true });
+       let insertedpPic = await pPicModel.findOneAndUpdate(
+      { userID: userID },
+      { pPic: req.body.pPic },
+      { new: true }
+    );
 
-       if(!insertedpPic){
-         insertedpPic = await pPicModel.insertMany({
-          pPic:pPic, userID:addedUser.id
-        })
-       }
+    if (!insertedpPic) {
+      insertedpPic = await pPicModel.create({
+        pPic: req.body.pPic,
+        userID: userID,
+      });
+    }
         res.status(200).json({ message: 'Profile pic added successfully', insertedpPic });
       }else{
         res.status(401).json({ message: 'Invalid token'});
