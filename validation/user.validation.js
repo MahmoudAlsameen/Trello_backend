@@ -38,6 +38,15 @@ const signInValidationSchema = Joi.object({
 
 });
 
+const loginGoogleValidationSchema = Joi.object({
+  email: Joi.string()
+    .email()
+    .required(),
+  password: Joi.string()
+    .required(),
+
+});
+
 export {
    signInValidationSchema,loginGoogleValidationSchema,
     signUpValidationSchema,setPPicValidationSchema
