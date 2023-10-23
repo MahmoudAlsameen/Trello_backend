@@ -64,8 +64,8 @@ const getUserPPic= async (req, res) => {
        if(PPicValidationError){
         return res.status(401).json({ message: "Error validating profile pic", error: PPicValidationError });
        }
-        const pPic = await pPicModel.find({ pPic: req.body.pPic });
-        res.status(200).json({ message: 'Profile pic', pPic });
+        const insertedpPic = await pPicModel.find({ pPic: req.body.pPic });
+        res.status(200).json({ message: 'Profile pic', insertedpPic });
       }else{
         res.status(401).json({ message: 'Invalid token'});
       }
@@ -80,7 +80,6 @@ const getUserPPic= async (req, res) => {
   }
 
 }
-
 
 
 
@@ -188,8 +187,8 @@ const setUserPPic= async (req, res) => {
         return res.status(401).json({ message: "Error validating profile pic", error: PPicValidationError });
        }
 
-        const pPic = await pPicModel.findOneAndUpdate({ userID: userID },{ pPic: req.body.pPic },{ new: true });
-        res.status(200).json({ message: 'Profile pic added successfully', pPic });
+        const insertedpPic = await pPicModel.findOneAndUpdate({ userID: userID },{ pPic: req.body.pPic },{ new: true });
+        res.status(200).json({ message: 'Profile pic added successfully', insertedpPic });
       }else{
         res.status(401).json({ message: 'Invalid token'});
       }
@@ -203,7 +202,6 @@ const setUserPPic= async (req, res) => {
     res.status(500).json({ message: 'Error setting profile pic',err });
   }
 };
-
 
 
 
