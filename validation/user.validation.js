@@ -20,7 +20,13 @@ const signUpValidationSchema = Joi.object({
 
 });
 
+const setPPicValidationSchema = Joi.object({
 
+  pic: Joi.Buffer(),
+  userID: Joi.string().required()
+
+},
+);
 
 
 const signInValidationSchema = Joi.object({
@@ -33,6 +39,6 @@ const signInValidationSchema = Joi.object({
 });
 
 export {
-    signInValidationSchema,
-    signUpValidationSchema
+   signInValidationSchema,loginGoogleValidationSchema,
+    signUpValidationSchema,setPPicValidationSchema
 }
