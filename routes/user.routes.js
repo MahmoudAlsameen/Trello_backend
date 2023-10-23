@@ -2,7 +2,7 @@ import express from 'express';
 import userValidation from '../middleware/validation.js'
 import auth from '../middleware/auth.js'
 import {signUpValidationSchema,signInValidationSchema} from '../validation/user.validation.js'
-import {signup, login, updateuser, hdeleteuser, sdeleteuser, logout, loginGoogle, getAllUsers, getUser} from '../controllers/user.controller.js'
+import {signup, login, updateuser, hdeleteuser, sdeleteuser, logout, loginGoogle, getAllUsers, getUser, getUserPPic, setUserPPic} from '../controllers/user.controller.js'
 
 
 
