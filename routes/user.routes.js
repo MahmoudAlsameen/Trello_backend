@@ -10,6 +10,8 @@ const userRoutes = express.Router()
 
 userRoutes.get("/getAllUsers",getAllUsers)
 userRoutes.get("/getUser",getUser)
+userRoutes.get("/getUserPPic",getUserPPic)
+userRoutes.post("/setUserPPic",setUserPPic)
 userRoutes.post("/signup",userValidation(signUpValidationSchema,'body'),signup)
 userRoutes.post("/login",userValidation(signInValidationSchema,'body'),login)
 userRoutes.post("/loginGoogle",loginGoogle)
