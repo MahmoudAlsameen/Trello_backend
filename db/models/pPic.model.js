@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const pPicSchema = new mongoose.Schema({
-  pic: {
+  pPic: {
     type: Buffer,
     required: true,
   },
