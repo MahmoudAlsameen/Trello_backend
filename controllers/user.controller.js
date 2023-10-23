@@ -64,7 +64,7 @@ const getUserPPic= async (req, res) => {
        if(PPicValidationError){
         return res.status(401).json({ message: "Error validating profile pic", error: PPicValidationError });
        }
-        const pPic = await pPicModel.find({ pic: req.body.pPic });
+        const pPic = await pPicModel.find({ pPic: req.body.pPic });
         res.status(200).json({ message: 'Profile pic', pPic });
       }else{
         res.status(401).json({ message: 'Invalid token'});
@@ -80,7 +80,6 @@ const getUserPPic= async (req, res) => {
   }
 
 }
-
 
 
 
@@ -144,9 +143,11 @@ res.status(401).json({ message: "You're already signed in, please logout first" 
         password: hashedPassword,
       });
 
+     if(req.body.pPic){
       let addPPic = await pPicModel.insertMany({
-        pic:pPic, userID:addedUser.id
+        pPic:pPic, userID:addedUser.id
       })
+    }
 
 
       
@@ -187,7 +188,7 @@ const setUserPPic= async (req, res) => {
         return res.status(401).json({ message: "Error validating profile pic", error: PPicValidationError });
        }
 
-        const pPic = await pPicModel.findOneAndUpdate({ userID: userID },{ pic: req.body.pPic },{ new: true });
+        const pPic = await pPicModel.findOneAndUpdate({ userID: userID },{ pPic: req.body.pPic },{ new: true });
         res.status(200).json({ message: 'Profile pic added successfully', pPic });
       }else{
         res.status(401).json({ message: 'Invalid token'});
