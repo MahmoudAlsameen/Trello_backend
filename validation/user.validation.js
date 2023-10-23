@@ -22,12 +22,11 @@ const signUpValidationSchema = Joi.object({
 
 const setPPicValidationSchema = Joi.object({
 
-  pic: Joi.string(),
+  pPic: Joi.string(),
   userID: Joi.string().required()
 
 },
 );
-
 
 const signInValidationSchema = Joi.object({
   email: Joi.string()
