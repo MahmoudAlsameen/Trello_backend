@@ -64,7 +64,7 @@ const getUserPPic= async (req, res) => {
        if(PPicValidationError){
         return res.status(401).json({ message: "Error validating profile pic", error: PPicValidationError });
        }
-        const insertedpPic = await pPicModel.find({ pPic: req.body.pPic });
+         const insertedpPic = await pPicModel.find({ userID: userID });
         res.status(200).json({ message: 'Profile pic', insertedpPic });
       }else{
         res.status(401).json({ message: 'Invalid token'});
