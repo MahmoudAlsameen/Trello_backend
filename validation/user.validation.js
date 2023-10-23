@@ -22,7 +22,7 @@ const signUpValidationSchema = Joi.object({
 
 const setPPicValidationSchema = Joi.object({
 
-  pic: Joi.Buffer(),
+  pic: Joi.string(),
   userID: Joi.string().required()
 
 },
