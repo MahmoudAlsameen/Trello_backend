@@ -64,7 +64,7 @@ const getUserPPic= async (req, res) => {
        if(PPicValidationError){
         return res.status(401).json({ message: "Error validating profile pic", error: PPicValidationError });
        }
-       const insertedpPic = await pPicModel.find({ userID: userID });
+        const insertedpPic = await pPicModel.find({ userID: userID });
         res.status(200).json({ message: 'Profile pic', insertedpPic });
       }else{
         res.status(401).json({ message: 'Invalid token'});
@@ -80,6 +80,7 @@ const getUserPPic= async (req, res) => {
   }
 
 }
+
 
 
 
@@ -137,15 +138,15 @@ res.status(401).json({ message: "You're already signed in, please logout first" 
       res.status(409).json({ message: 'User is already registered' });
     } else {
       let hashedPassword = bcrypt.hashSync(req.body.password, 4);
-      let addedUser = await userModel.insertMany({
+      let addedUser = await userModel.create({
         ...req.body,
         password: hashedPassword,
       });
-
-     if(req.body.pPic){
-      let addPPic = await pPicModel.insertMany({
-        pPic:pPic, userID:addedUser.id
-      })
+      if(req.body.pPic){
+        await pPicModel.create({
+          pPic: req.body.pPic,
+          userID: addedUser.id
+        });
     }
 
 
@@ -188,17 +189,18 @@ const setUserPPic= async (req, res) => {
        }
 
        let insertedpPic = await pPicModel.findOneAndUpdate(
-      { userID: userID },
-      { pPic: req.body.pPic },
-      { new: true }
-    );
+        { userID: userID },
+        { pPic: req.body.pPic },
+        { new: true }
+      );
+  
+      if (!insertedpPic) {
+        insertedpPic = await pPicModel.create({
+          pPic: req.body.pPic,
+          userID: userID,
+        });
+      }
 
-    if (!insertedpPic) {
-      insertedpPic = await pPicModel.create({
-        pPic: req.body.pPic,
-        userID: userID,
-      });
-    }
         res.status(200).json({ message: 'Profile pic added successfully', insertedpPic });
       }else{
         res.status(401).json({ message: 'Invalid token'});
@@ -213,7 +215,6 @@ const setUserPPic= async (req, res) => {
     res.status(500).json({ message: 'Error setting profile pic',err });
   }
 };
-
 
 
 const login = async (req, res) => {
