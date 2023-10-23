@@ -1,4 +1,6 @@
 import userModel from '../db/models/user.model.js';
+import pPicModel from '../db/models/pPic.model.js';
+import { setPPicValidationSchema } from '../validation/user.validation.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -33,6 +35,55 @@ const getUser = async (req,res)=>{
     res.status(500).json({ message: 'Internal server error',err });
   }
 };
+
+
+
+const getUserPPic= async (req, res) => {
+  try {
+    if(req.headers.token){
+      let userID = await jwt.verify(req.headers.token, 'bl7 5ales').id;
+    console.log('user identified', userID);
+
+    if (userID) {
+      //check if token has user id
+      let targetedUserID = await userModel.findById(userID);
+      if (targetedUserID && targetedUserID.isLogout==false) {
+        const user = await userModel.findById(userID).populate('assignedTasks');
+
+        // Check if any users were found
+        if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+        }
+        const validatePPic = (schema, source) => {
+          const { error } = schema.validate(req[source]);
+          return error;
+        };
+
+        const PPicValidationError = validatePPic(setPPicValidationSchema, 'body');
+  
+       if(PPicValidationError){
+        return res.status(401).json({ message: "Error validating profile pic", error: PPicValidationError });
+       }
+        const pPic = await pPicModel.find({ pic: req.body.pPic });
+        res.status(200).json({ message: 'Profile pic', pPic });
+      }else{
+        res.status(401).json({ message: 'Invalid token'});
+      }
+    }
+  }else{
+    res.status(401).json({ message: 'Not signed in'});
+  }
+
+  } catch (err) {
+    console.error('Error getting profile pic:', err);
+    res.status(500).json({ message: 'Error getting profile pic',err });
+  }
+
+}
+
+
+
+
 
 
 
@@ -92,6 +143,13 @@ res.status(401).json({ message: "You're already signed in, please logout first" 
         ...req.body,
         password: hashedPassword,
       });
+
+      let addPPic = await pPicModel.insertMany({
+        pic:pPic, userID:addedUser.id
+      })
+
+
+      
       console.log('added successfully', addedUser);
       res.status(201).json({ message: 'added successfully', addedUser });
     }
@@ -100,6 +158,53 @@ res.status(401).json({ message: "You're already signed in, please logout first" 
     res.status(401).json({ message: "error singing up", err });
   }
 };
+
+
+const setUserPPic= async (req, res) => {
+  try {
+    if(req.headers.token){
+      let userID = await jwt.verify(req.headers.token, 'bl7 5ales').id;
+    console.log('user identified', userID);
+
+    if (userID) {
+      //check if token has user id
+      let targetedUserID = await userModel.findById(userID);
+      if (targetedUserID && targetedUserID.isLogout==false) {
+        const user = await userModel.findById(userID).populate('assignedTasks');
+
+        // Check if any users were found
+        if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+        }
+        const validatePPic = (schema, source) => {
+          const { error } = schema.validate(req[source]);
+          return error;
+        };
+
+        const PPicValidationError = validatePPic(setPPicValidationSchema, 'body');
+  
+       if(PPicValidationError){
+        return res.status(401).json({ message: "Error validating profile pic", error: PPicValidationError });
+       }
+
+        const pPic = await pPicModel.findOneAndUpdate({ userID: userID },{ pic: req.body.pPic },{ new: true });
+        res.status(200).json({ message: 'Profile pic added successfully', pPic });
+      }else{
+        res.status(401).json({ message: 'Invalid token'});
+      }
+    }
+  }else{
+    res.status(401).json({ message: 'Not signed in'});
+  }
+
+  } catch (err) {
+    console.error('Error setting profile pic:', err);
+    res.status(500).json({ message: 'Error setting profile pic',err });
+  }
+};
+
+
+
 
 const login = async (req, res) => {
   try {
@@ -364,4 +469,4 @@ const loginGoogle = async (req, res) => {
 
 
 
-export { signup, login,loginGoogle, updateuser, hdeleteuser, sdeleteuser, logout, getAllUsers, getUser };
+export { signup, login,loginGoogle, updateuser, hdeleteuser, sdeleteuser, logout, getAllUsers, getUser, getUserPPic, setUserPPic };
