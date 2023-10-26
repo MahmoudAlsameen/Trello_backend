@@ -182,9 +182,8 @@ console.log("deletedTask.id is :",updatedTask.id)
       taskCreatorID=taskCreatorID.creatorID
       console.log("taskCreatorID is : ",taskCreatorID)
 
-      const fIsUserArr = isUserArr2.filter((task) => task.equals(updatedTask.id));
-      console.log("fIsUserArr: ",fIsUserArr)
-      if(fIsUserArr.length===1 && taskCreatorID.equals(userID)){
+      
+      if(taskCreatorID== userID){
         let targetedTask= await taskModel.findByIdAndDelete(updatedTask.id)
          const newisUserArr2=isUserArr2.filter((task)=>{task.id !=updatedTask.id})
          await userModel.findByIdAndUpdate(userID,{ $set: { createdTasks: newisUserArr2 } }, { new: true })
@@ -203,6 +202,7 @@ console.log("deletedTask.id is :",updatedTask.id)
       res.status(500).json({ message: "Internal server error" });
     }
   };
+    
     
 
  const getaAllTasksForUser = async (req,res)=>{
