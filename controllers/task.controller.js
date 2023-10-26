@@ -161,7 +161,7 @@ const deletetask = async (req,res)=>{
       };
   
       // Validate the task data against the schema
-      const updateTaskValidationError = validateTask(updateTaskValidationSchema, 'body');
+      const updateTaskValidationError = validateTask(updateTaskValidationSchema, 'params');
   
       if (updateTaskValidationError) {
         console.log()
@@ -169,12 +169,12 @@ const deletetask = async (req,res)=>{
       }
   
       // update task
-      const updatedTask = req.body
-console.log("deletedTask.id is :",updatedTask.id)
+      const deletedTaskID = req.params.taskID
+console.log("deletedTask.id is :",deletedTaskID)
       const isUserArr = await userModel.findById(userID)
       const isUserArr2 = isUserArr.createdTasks
       console.log('created tasks array of user: ',isUserArr2)
-      let taskCreatorID= await taskModel.findById(updatedTask.id)
+      let taskCreatorID= await taskModel.findById(deletedTaskID)
       if(!taskCreatorID){
         console.log("task not found");
         return res.status(401).json({ message: "task not found" });
@@ -184,8 +184,8 @@ console.log("deletedTask.id is :",updatedTask.id)
 
       
       if(taskCreatorID== userID){
-        let targetedTask= await taskModel.findByIdAndDelete(updatedTask.id)
-         const newisUserArr2=isUserArr2.filter((task)=>{task.id !=updatedTask.id})
+        let targetedTask= await taskModel.findByIdAndDelete(deletedTaskID)
+         const newisUserArr2=isUserArr2.filter((task)=>{task.id !=deletedTaskID})
          await userModel.findByIdAndUpdate(userID,{ $set: { createdTasks: newisUserArr2 } }, { new: true })
         console.log("Task deleted successfully");
        return res.status(201).json({ message: "Task deleted successfully", targetedTask });
