@@ -14,7 +14,7 @@ const taskRoutes = express.Router();
 
 taskRoutes.post('/addtask', auth, addtask);
 taskRoutes.put('/updatetask', auth, updatetask);
-taskRoutes.delete('/deletetask', auth, deletetask);
+taskRoutes.delete('/deletetask/:taskID', auth, deletetask);
 taskRoutes.get('/getaAllTasksAssignedForUser', getaAllTasksAssignedForUser);
 taskRoutes.get('/getaAllTasksForUser', getaAllTasksForUser);
 taskRoutes.get('/getalltaskswithuserdata', getalltaskswithuserdata);
