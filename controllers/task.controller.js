@@ -160,13 +160,7 @@ const deletetask = async (req,res)=>{
         return error;
       };
   
-      // Validate the task data against the schema
-      const updateTaskValidationError = validateTask(updateTaskValidationSchema, 'params');
-  
-      if (updateTaskValidationError) {
-        console.log()
-        return res.status(400).json({ message: "Error validating task", error: updateTaskValidationError });
-      }
+      // Validation section
   
       // update task
       const deletedTaskID = req.params.taskID
