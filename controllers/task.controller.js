@@ -1,5 +1,6 @@
 import userModel from '../db/models/user.model.js'
 import taskModel from '../db/models/task.model.js'
+import commentModel from '../db/models/comment.model.js';
 import {taskValidationSchema, updateTaskValidationSchema} from '../validation/task.validation.js'
 
 
