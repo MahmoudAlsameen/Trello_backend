@@ -7,7 +7,8 @@ import {
   getaAllTasksForUser,
   getalltaskswithuserdata,
   getalloverduetasks,
-  getaAllTasksAssignedForUser
+  getaAllTasksAssignedForUser, deleteTaskComments,
+  addTaskComments
 } from '../controllers/task.controller.js';
 
 const taskRoutes = express.Router();
@@ -19,5 +20,7 @@ taskRoutes.get('/getaAllTasksAssignedForUser', getaAllTasksAssignedForUser);
 taskRoutes.get('/getaAllTasksForUser', getaAllTasksForUser);
 taskRoutes.get('/getalltaskswithuserdata', getalltaskswithuserdata);
 taskRoutes.get('/getalloverduetasks', getalloverduetasks);
+taskRoutes.post('/addTaskComments/', addTaskComments);
+taskRoutes.delete('/deleteTaskComments/:commentID', deleteTaskComments);
 
 export default taskRoutes;
