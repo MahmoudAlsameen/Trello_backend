@@ -321,7 +321,7 @@ const getalloverduetasks = async (req,res)=>{
 
      const addedComment = await commentModel.create({...req.body,creatorID:userID})
 
-     const updatedTask = await taskModel.findByIdAndUpdate(userID,{$push:{comments:addedComment.id}},{new:true})
+     const updatedTask = await taskModel.findByIdAndUpdate(taskID,{$push:{comments:addedComment.id}},{new:true})
 
      console.log("comment added successfully","comment: ", addedComment, "updatedTask: ", updatedTask)
       return res.status(200).json({message:"comment added successfully",comment: addedComment, updatedTask: updatedTask })
