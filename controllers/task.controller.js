@@ -372,7 +372,7 @@ const getalloverduetasks = async (req,res)=>{
       
         const taskAfterCommentDeleted1 = await taskModel.findById(deletedComment.taskID)
         const taskAfterCommentDeletedArr = taskAfterCommentDeleted1.comments.filter((comment)=>{
-          comment != deletedCommentID
+          comment.id != deletedCommentID
         })
         const deletedCommentUpdated = await commentModel.findByIdAndDelete(deletedCommentID)
         const taskAfterCommentDeleted = await taskModel.findByIdAndUpdate(deletedComment.taskID, {comments:taskAfterCommentDeletedArr},{new:true})
