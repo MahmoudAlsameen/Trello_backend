@@ -218,7 +218,13 @@ console.log("deletedTask.id is :",deletedTaskID)
         console.log("User not found")
         return res.status(404).json({ message: "User not found" });
       }
-        const allTasksWithUserData= await taskModel.find({ creatorID: userID }).populate('creatorID').populate('assignedTo').populate('comments')
+        const allTasksWithUserData= await taskModel.find({ creatorID: userID }).populate('creatorID').populate('assignedTo').populate({
+          path: 'comments',
+          populate: {
+            path: 'creatorID',
+            model: 'User'
+          },
+        })
         console.log("Task dispalyed successfully");
         return res.status(201).json({ message: "Task displayed successfully", allTasksWithUserData });
 
@@ -247,7 +253,13 @@ console.log("deletedTask.id is :",deletedTaskID)
           console.log("User not found")
           return res.status(404).json({ message: "User not found" });
         }
-          const allTasksAssignedToUser= await taskModel.find({ assignedTo: userID }).populate('creatorID').populate('comments');
+          const allTasksAssignedToUser= await taskModel.find({ assignedTo: userID }).populate('creatorID').populate({
+          path: 'comments',
+          populate: {
+            path: 'creatorID',
+            model: 'User'
+          },
+        })
           console.log("Task dispalyed successfully");
           return res.status(201).json({ message: "Task displayed successfully", allTasksAssignedToUser });
   
