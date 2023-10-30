@@ -304,8 +304,8 @@ const getalloverduetasks = async (req,res)=>{
         console.log("user not found")
         return res.status(401).json({message:"user not found" })
       }
-     const {id, text}=req.body
-      if(!id){
+          const {taskID, text}=req.body
+      if(!taskID){
         console.log("no task id")
         return res.status(401).json({message:"no task id" })
       }
@@ -313,7 +313,7 @@ const getalloverduetasks = async (req,res)=>{
       console.log("invalid task comment")
       return res.status(401).json({message:"invalid task comment" })
      }
-     const updatedTaskID = await taskModel.findById(id)
+     const updatedTaskID = await taskModel.findById(taskID)
      if(!updatedTaskID){
       console.log("task not found")
         return res.status(401).json({message:"task not found" })
