@@ -323,8 +323,8 @@ const getalloverduetasks = async (req,res)=>{
 
      const updatedTask = await taskModel.findByIdAndUpdate(userID,{$push:{comments:addedComment.id}},{new:true})
 
-     console.log("task added successfully","comment: ", addedComment, "updatedTask: ", updatedTask)
-      return res.status(200).json({message:"task added successfully",comment: addedComment, updatedTask: updatedTask })
+     console.log("comment added successfully","comment: ", addedComment, "updatedTask: ", updatedTask)
+      return res.status(200).json({message:"comment added successfully",comment: addedComment, updatedTask: updatedTask })
 
     }catch(err){
       console.log("catch error ", err)
