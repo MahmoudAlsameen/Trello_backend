@@ -4,10 +4,15 @@ import 'dotenv/config'
 
 
 const connection = () => {
-    mongoose.connect(`mongodb+srv://${process.env.DB_UserName}:${process.env.DB_Password}@cluster95596.pbabicr.mongodb.net/`)
-        .then(() => console.log("DB connected"))
-        .catch((err) => console.log(`DB error ${err}`))
-}
+  mongoose
+    .connect(process.env.MONGO_DB_URI)
+    .then((data) => {
+      console.log(`Database Connected ${data.connection.host}`);
 
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+};
 
-export default connection
+export default connection;
